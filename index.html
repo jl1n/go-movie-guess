@@ -1,0 +1,66 @@
+<html>
+
+<head></head>
+
+<body>
+    <h1>Guess the Movie</h1>
+    <h2>Movie Description</h2>
+    <p id="overview"></p>
+
+    <form id="guess-form" onsubmit="return false">
+        <input name="guess" />
+        <input type="submit" value="Guess" onclick="guessMovie()" />
+    </form>
+
+    <button onclick="getNew()">New</button>
+
+    <h2 id="result"></h2>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getNew();
+        });
+
+        function getNew() {
+            $.ajax({
+                url: "/new",
+                method: "POST",
+                success: function (response) {
+
+                    $('#overview').empty();
+                    $('#overview').html(response);
+                    $('#guess-form')[0].reset();
+                    $('#result').html("");
+                }
+            });
+            return false;
+        }
+
+        function guessMovie() {
+            $.ajax({
+                url: "/guess",
+                method: "POST",
+                data: $("#guess-form").serialize(),
+                success: function (response) {
+                    dataJSON = JSON.parse(response);
+
+                    $('#result').html(dataJSON.Correct);
+                    if (dataJSON.Correct == "Correct") {
+                        var img = document.createElement("img");
+                        var space = document.createElement("div");
+                        img.src = "https://image.tmdb.org/t/p/w1280" + dataJSON.PosterPath;
+                        img.height = 512;
+                        img.width = 288;
+                        var src = document.getElementById("result");
+                        src.appendChild(space);
+                        src.appendChild(img);
+                    }
+                }
+            });
+            return false;
+        }
+    </script>
+</body>
+
+</html>
