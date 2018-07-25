@@ -97,7 +97,8 @@ func getRandomMovieInfo() (Result, error) {
 	var err error
 	base := "https://api.themoviedb.org/3"
 	endpoint := "/movie/popular"
-	apikey := ""
+	// insert api key from themoviedb.org
+	apikey := "Insert API key here"
 
 	// mac keychain workaround
 	tr := &http.Transport{
